@@ -1,4 +1,5 @@
 const { model, Schema, ObjectId } = require('mongoose');
+const Movie = require("./movie-model").schema;
 
 const userSchema = new Schema (
     {
@@ -23,7 +24,8 @@ const userSchema = new Schema (
             enum: ['CANADA','BRAZIL','INDIA','GERMANY','CHILE'],
             required: true
         },
-        friends: [this]
+        friends: [this],
+        favoriteMovies: [Movie]
     }
 );
 
