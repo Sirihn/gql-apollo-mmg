@@ -23,7 +23,34 @@ const resolvers = {
             const movie = await Movie.findOne({ name: name });
             return movie;
         }
+    },
+    User: {
+        favoriteMovies: async () => {
+            
+            return await User.find({}, 'friends');
+        }
+    },
+    Mutation: {
+        createUser: async (_, args) => {
+            const { name, username, age, nationality } = args.input;
+
+
+            const newestUser = await User.find().sort("-id").limit(1).findOne();
+            const id = newestUser.id + 1;
+
+            const newUser = new User({
+                id: id,
+                name: name,
+                username: username,
+                age: age,
+                nationality: nationality
+            });
+
+            await newUser.save();
+            return newUser;
+        }
     }
-}
+
+};
 
 module.exports = { resolvers }; 
