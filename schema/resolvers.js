@@ -49,13 +49,17 @@ const resolvers = {
             await newUser.save();
             return newUser;
         },
-
         updateUsername: async (_,args) => {
             const id = args.input.id;
             const newUsername = args.input.username;
 
             const updatedUser = await User.findOneAndUpdate({id: id}, {username: newUsername});
             return updatedUser;
+        },
+        deleteUser: async(_,args) => {
+            const id = args.id;
+            const deletedUser = await User.findOneAndDelete({id: id});
+            return deletedUser;
         }
     }
 
