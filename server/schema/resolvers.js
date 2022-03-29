@@ -6,9 +6,11 @@ const resolvers = {
     Query: {
         //USER RESOLVERS
         users: async () => {
-            return await User.find();
+            const users = await User.find();
+            if(users) return {users: users};
+            return { message: "Error getting users" };
         },
-        user: async (_, args) => {
+        user: async (parent, args, context, info) => {
             const id = args.id;
             const user = await User.findOne({ id: id });
             return user;
@@ -25,8 +27,8 @@ const resolvers = {
         }
     },
     User: {
-        favoriteMovies: async () => {
-            
+        favoriteMovies: async (parent) => {
+            console.log(parent);
             return await User.find({}, 'friends');
         }
     },
@@ -61,8 +63,17 @@ const resolvers = {
             const deletedUser = await User.findOneAndDelete({id: id});
             return deletedUser;
         }
+    },
+    UsersResult: {
+        __resolveType(obj) {
+            if(obj.users){
+                return "UsersSuccessfulResult";
+            }
+            if(obj.message)
+                return "UsersErrorResults";
+            return null;
+        }
     }
-
 };
 
 module.exports = { resolvers }; 
